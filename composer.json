@@ -1,0 +1,19 @@
+{
+    "name": "cblink/region",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Hanson",
+            "email": "h@hanc.cc"
+        }
+    ],
+    "require": {},
+    "require-dev": {
+        "laravel/framework": "5.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Cblink\\Region\\": "src/"
+        }
+    }
+}
