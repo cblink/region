@@ -35,7 +35,7 @@ class CreateRegionsTable extends Migration
         foreach ($provinces as $province) {
             $provinceId = DB::table('provinces')->insertGetId(['name' => $province['name']]);
             foreach ($province['city'] as $city) {
-                $cityId = DB::table('cities')->insertGetId(['name' => $province['name'], 'province_id' => $provinceId]);
+                $cityId = DB::table('cities')->insertGetId(['name' => $city['name'], 'province_id' => $provinceId]);
                 $areas = array_map(function ($area) use ($cityId) {
                     return ['name' => $area, 'city_id' => $cityId];
                 }, $city['area']);
