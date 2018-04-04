@@ -34,47 +34,22 @@ class CreateRegionsTable extends Migration
 
         // 存储行政编码
         $this->fillRegionsWithCode();
-
-        // 不存储行政编码
-        // $this->fillRegions();
-    }
-
-    public function fillRegions()
-    {
-        $region = new Region();
-
-        $provinces = $region->getRegions();
-
-        foreach ($provinces as $province) {
-            $provinceId = DB::table('provinces')->insertGetId(['name' => $province['name']]);
-            foreach ($province['city'] as $city) {
-                $cityId = DB::table('cities')->insertGetId(['name' => $city['name'], 'province_id' => $provinceId]);
-                $areas = array_map(function ($area) use ($cityId) {
-                    return ['name' => $area, 'city_id' => $cityId];
-                }, $city['area']);
-                DB::table('areas')->insert($areas);
-            }
-        }
     }
 
     public function fillRegionsWithCode()
     {
         $region = new Region();
 
-        $codes = $region->getRegionsWithCode();
+        $provinces = $region->getRegionsWithCode();
 
-        foreach ($codes as $provinceCode => $name) {
-            $code = GB2260::areaCode($provinceCode);
-            if ($code->isProvince()) {
-                $provinceId = DB::table('provinces')->insertGetId(['name' => $code->getProvince(), 'code' => $provinceCode]);
-                foreach ($code->getCity() as $cityCode => $city) {
-                    $code = GB2260::areaCode($cityCode);
-                    $cityId = DB::table('cities')->insertGetId(['name' => $city['name'], 'province_id' => $provinceId, 'code' => $cityCode]);
-                    $areas = collect($code->getDistrict())->map(function ($name, $code) use ($cityId) {
-                        return ['name' => $name, 'code' => $code, 'city_id' => $cityId];
-                    })->all();
-                    DB::table('areas')->insert($areas);
-                }
+        foreach ($provinces as $province) {
+            $provinceId = DB::table('provinces')->insertGetId(['name' => $province['title'], 'code' => $province['ad_code']]);
+            foreach ($province['child'] as $city) {
+                $cityId = DB::table('cities')->insertGetId(['name' => $city['title'], 'province_id' => $provinceId, 'code' => $city['ad_code']]);
+                $areas = array_map(function ($area) use ($cityId) {
+                    return ['name' => $area['title'], 'city_id' => $cityId, 'code' => $area['ad_code']];
+                }, $city['child']);
+                DB::table('areas')->insert($areas);
             }
         }
     }

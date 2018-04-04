@@ -7,9 +7,6 @@
             "email": "h@hanc.cc"
         }
     ],
-    "require": {
-        "lybc/php-gb2260": "^1.0"
-    },
     "require-dev": {
         "laravel/framework": "5.*"
     },

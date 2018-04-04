@@ -14,7 +14,7 @@ class Region
      */
     public function getRegions()
     {
-        $raw = file_get_contents(__DIR__.'../data/data.json');
+        $raw = file_get_contents(__DIR__.'/../data/data.json');
 
         return json_decode($raw, true);
     }
@@ -26,7 +26,7 @@ class Region
      */
     public function getRegionsWithCode()
     {
-        $raw = file_get_contents(__DIR__.'../data/data-with-code.json');
+        $raw = file_get_contents(__DIR__.'/../data/data-with-code.json');
 
         return json_decode($raw, true);
     }
