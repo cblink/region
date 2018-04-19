@@ -14,5 +14,12 @@
         "psr-4": {
             "Cblink\\Region\\": "src/"
         }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Cblink\\Region\\RegionServiceProvider"
+            ]
+        }
     }
 }
