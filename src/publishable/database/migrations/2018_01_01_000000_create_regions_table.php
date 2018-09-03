@@ -12,6 +12,13 @@ class CreateRegionsTable extends Migration
 
     public function up()
     {
+        $this->migrateWithCode();
+
+//        $this->migrateWithoutCode();
+    }
+
+    protected function migrateWithoutCode()
+    {
         Schema::create('provinces', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
@@ -38,6 +45,38 @@ class CreateRegionsTable extends Migration
         $this->fillRegionsWithoutCode();
     }
 
+    protected function migrateWithCode()
+    {
+        Schema::create('areas', function (Blueprint $table) {
+            $table->increments('id');
+            $table->unsignedInteger('parent_id')->nullable()->index();
+            $table->string('name');
+            $table->unsignedInteger('code');
+        });
+
+        $region = new Region();
+
+        $provinces = $region->getRegionsWithCode();
+
+        foreach ($provinces as $province) {
+            $provinceId = DB::table('areas')->insertGetId([
+                'name' => $province['title'],
+                'code' => $province['ad_code'],
+            ]);
+            foreach ($province['child'] as $city) {
+                $cityId = DB::table('areas')->insertGetId([
+                    'name' => $city['title'],
+                    'parent_id' => $provinceId,
+                    'code' => $city['ad_code'],
+                ]);
+                $areas = array_map(function ($area) use ($cityId) {
+                    return ['name' => $area, 'parent_id' => $cityId];
+                }, $city['child']);
+                DB::table('areas')->insert($areas);
+            }
+        }
+    }
+
     public function fillRegionsWithoutCode()
     {
         $region = new Region();
@@ -49,24 +88,6 @@ class CreateRegionsTable extends Migration
                 $areas = array_map(function ($area) use ($cityId) {
                     return ['name' => $area, 'city_id' => $cityId];
                 }, $city['area']);
-                DB::table('areas')->insert($areas);
-            }
-        }
-    }
-
-    public function fillRegionsWithCode()
-    {
-        $region = new Region();
-
-        $provinces = $region->getRegionsWithCode();
-
-        foreach ($provinces as $province) {
-            $provinceId = DB::table('provinces')->insertGetId(['name' => $province['title'], 'code' => $province['ad_code']]);
-            foreach ($province['child'] as $city) {
-                $cityId = DB::table('cities')->insertGetId(['name' => $city['title'], 'province_id' => $provinceId, 'code' => $city['ad_code']]);
-                $areas = array_map(function ($area) use ($cityId) {
-                    return ['name' => $area['title'], 'city_id' => $cityId, 'code' => $area['ad_code']];
-                }, $city['child']);
                 DB::table('areas')->insert($areas);
             }
         }
