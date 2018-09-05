@@ -23,3 +23,17 @@ Cblink\Region\RegionServiceProvider::class,
 执行迁移
 
 `php artisan migrate`
+
+### 默认方法
+
+```php
+use Cblink\Region\Region;
+
+$region = new Region();
+
+$region->allProvinces(); // 全部省份
+$region->allCities(); // 全部城市
+$region->allAreas(); // 全部区
+$region->nest($id = null); // 展示全部子区域，可指定某个省或市id
+$region->nestFromChild($id); // 根据市或区id展示其所有父结构
+```
