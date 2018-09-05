@@ -7,6 +7,10 @@ namespace Cblink\Region;
 class Region
 {
 
+    const PROVINCE = 1;
+    const CITY = 2;
+    const AREA = 3;
+
     /**
      * 获取区域数组
      *

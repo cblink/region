@@ -51,6 +51,7 @@ class CreateRegionsTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('parent_id')->nullable()->index();
             $table->string('name');
+            $table->unsignedTinyInteger('type');
             $table->unsignedInteger('code');
         });
 
@@ -62,15 +63,17 @@ class CreateRegionsTable extends Migration
             $provinceId = DB::table('areas')->insertGetId([
                 'name' => $province['title'],
                 'code' => $province['ad_code'],
+                'type' => Region::PROVINCE,
             ]);
             foreach ($province['child'] as $city) {
                 $cityId = DB::table('areas')->insertGetId([
                     'name' => $city['title'],
                     'parent_id' => $provinceId,
                     'code' => $city['ad_code'],
+                    'type' => Region::CITY,
                 ]);
                 $areas = array_map(function ($area) use ($cityId) {
-                    return ['name' => $area, 'parent_id' => $cityId];
+                    return ['name' => $area['title'], 'code' => $area['ad_code'], 'parent_id' => $cityId, 'type' => Region::AREA];
                 }, $city['child']);
                 DB::table('areas')->insert($areas);
             }
@@ -95,9 +98,9 @@ class CreateRegionsTable extends Migration
 
     public function down()
     {
-        Schema::dropIfExists('provinces');
-        Schema::dropIfExists('cities');
+//        Schema::dropIfExists('provinces');
+//        Schema::dropIfExists('cities');
         Schema::dropIfExists('areas');
     }
-    
+
 }
