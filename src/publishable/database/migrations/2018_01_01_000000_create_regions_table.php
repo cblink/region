@@ -12,7 +12,7 @@ class CreateRegionsTable extends Migration
 
     public function up()
     {
-        Schema::create('areas', function (Blueprint $table) {
+        Schema::create(config('region.table'), function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('parent_id')->nullable()->index();
             $table->string('name');
@@ -25,13 +25,13 @@ class CreateRegionsTable extends Migration
         $provinces = $region->getRegionsWithCode();
 
         foreach ($provinces as $province) {
-            $provinceId = DB::table('areas')->insertGetId([
+            $provinceId = DB::table(config('region.table'))->insertGetId([
                 'name' => $province['title'],
                 'code' => $province['ad_code'],
                 'type' => Region::PROVINCE,
             ]);
             foreach ($province['child'] as $city) {
-                $cityId = DB::table('areas')->insertGetId([
+                $cityId = DB::table(config('region.table'))->insertGetId([
                     'name' => $city['title'],
                     'parent_id' => $provinceId,
                     'code' => $city['ad_code'],
@@ -40,14 +40,14 @@ class CreateRegionsTable extends Migration
                 $areas = array_map(function ($area) use ($cityId) {
                     return ['name' => $area['title'], 'code' => $area['ad_code'], 'parent_id' => $cityId, 'type' => Region::AREA];
                 }, $city['child']);
-                DB::table('areas')->insert($areas);
+                DB::table(config('region.table'))->insert($areas);
             }
         }
     }
 
     public function down()
     {
-        Schema::dropIfExists('areas');
+        Schema::dropIfExists(config('region.table'));
     }
 
 }
