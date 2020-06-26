@@ -9,8 +9,9 @@ class Region
     const PROVINCE = 1;
     const CITY = 2;
     const AREA = 3;
+    const STREET = 4;
 
-    
+
     public function allProvinces()
     {
         return $this->query(self::PROVINCE);
@@ -22,6 +23,10 @@ class Region
     }
 
     public function allAreas()
+    {
+        return $this->query(self::AREA);
+    }
+    public function allStreets()
     {
         return $this->query(self::AREA);
     }
