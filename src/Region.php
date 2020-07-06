@@ -33,12 +33,12 @@ class Region
 
     public function nestFromChild($id)
     {
-        return Area::with('parent.parent')->where('id', $id)->get();
+        return Area::with('parent.parent.parent')->where('id', $id)->get();
     }
 
     public function nest($id = null)
     {
-        return Area::with('children.children')->when($id, function ($query, $id) {
+        return Area::with('children.children.children')->when($id, function ($query, $id) {
             $query->where('id', $id);
         })->get();
     }
