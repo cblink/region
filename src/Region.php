@@ -28,7 +28,7 @@ class Region
     }
     public function allStreets()
     {
-        return $this->query(self::AREA);
+        return $this->query(self::STREET);
     }
 
     public function nestFromChild($id)
