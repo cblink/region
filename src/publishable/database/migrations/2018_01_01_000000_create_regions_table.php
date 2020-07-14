@@ -1,6 +1,6 @@
 <?php
 
-use Cblink\Region\Region;
+use Myischen\Region\Region;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
@@ -26,22 +26,35 @@ class CreateRegionsTable extends Migration
 
         foreach ($provinces as $province) {
             $provinceId = DB::table('areas')->insertGetId([
-                'name' => $province['title'],
-                'code' => $province['ad_code'],
+                'name' => $province['name'],
+                'code' => $province['code'],
                 'type' => Region::PROVINCE,
             ]);
-            foreach ($province['child'] as $city) {
+            foreach($province['children'] as $city ){
                 $cityId = DB::table('areas')->insertGetId([
-                    'name' => $city['title'],
+                    'name' => $city['name'],
                     'parent_id' => $provinceId,
-                    'code' => $city['ad_code'],
-                    'type' => Region::CITY,
+                    'code' => $city['code'],
+                    'type' =>Region::CITY,
                 ]);
-                $areas = array_map(function ($area) use ($cityId) {
-                    return ['name' => $area['title'], 'code' => $area['ad_code'], 'parent_id' => $cityId, 'type' => Region::AREA];
-                }, $city['child']);
-                DB::table('areas')->insert($areas);
+                foreach($city['children'] as $area ){
+                    $areaId = DB::table('areas')->insertGetId([
+                        'name' => $area['name'],
+                        'parent_id' => $cityId,
+                        'code' => $area['code'],
+                        'type' =>Region::AREA,
+                    ]);
+
+                    $street = array_map(function ($area) use ($areaId) {
+                        return ['name' => $area['name'], 'code' => $area['code'], 'parent_id' => $areaId, 'type' => Region::STREET];
+                    }, $area['children']);
+
+                    DB::table('areas')->insert($street);
+
+                }
+
             }
+
         }
     }
 

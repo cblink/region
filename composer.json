@@ -1,24 +1,22 @@
 {
-    "name": "cblink/region",
+    "name": "myischen/region",
     "license": "MIT",
-    "authors": [
-        {
-            "name": "Hanson",
-            "email": "h@hanc.cc"
-        }
-    ],
+    "authors": [{
+        "name": "chen",
+        "email": "512395193@163.com"
+    }],
     "require-dev": {
         "laravel/framework": "5.*"
     },
     "autoload": {
         "psr-4": {
-            "Cblink\\Region\\": "src/"
+            "Myischen\\Region\\": "src/"
         }
     },
     "extra": {
         "laravel": {
             "providers": [
-                "Cblink\\Region\\RegionServiceProvider"
+                "Myischen\\Region\\RegionServiceProvider"
             ]
         }
     }

@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Cblink\Region;
+namespace Myischen\Region;
 
 
 use Illuminate\Support\ServiceProvider;
