@@ -1,6 +1,6 @@
 <?php
 
-namespace Cblink\Region;
+namespace Myischen\Region;
 
 
 class Region
