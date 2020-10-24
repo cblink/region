@@ -43,6 +43,18 @@ class Region
         })->get();
     }
 
+    public function nestFromChildByCode($code)
+    {
+        return Area::with('parent.parent.parent')->where('code', $code)->get();
+    }
+
+    public function nestByCode($code = null)
+    {
+        return Area::with('children.children.children')->when($code, function ($query, $code) {
+            $query->where('code', $code);
+        })->get();
+    }
+
     protected function query($type)
     {
         return Area::where('type', $type)->get();
