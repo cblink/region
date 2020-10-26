@@ -37,7 +37,14 @@ $region->allAreas(); // 全部区
 $region->allStreets()//所有乡镇
 $region->nest($id = null); // 展示全部子区域，可指定某个省或市id
 $region->nestFromChild($id); // 根据市或区id展示其所有父结构
+$region->nestByCode($code = null); // 展示全部子区域，可指定某个省或市code
+$region->nestFromChildByCode($code); // 根据市或区code展示其所有父结构
 ```
+#### Commands
 
+Regions Update
+```bash
+$ php artisan region:update
+```
 
 数据来自 <https://github.com/modood/Administrative-divisions-of-China>
