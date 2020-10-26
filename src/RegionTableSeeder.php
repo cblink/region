@@ -14,7 +14,7 @@ class RegionTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('users')->truncate();
+        DB::table('areas')->truncate();
 
         $region = new Region();
 

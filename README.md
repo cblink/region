@@ -40,7 +40,7 @@ $region->nestFromChild($id); // 根据市或区id展示其所有父结构
 $region->nestByCode($code = null); // 展示全部子区域，可指定某个省或市code
 $region->nestFromChildByCode($code); // 根据市或区code展示其所有父结构
 ```
-#### Commands
+#### Command
 
 Regions Update
 ```bash
