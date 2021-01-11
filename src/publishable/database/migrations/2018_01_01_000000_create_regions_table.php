@@ -14,7 +14,7 @@ class CreateRegionsTable extends Migration
     {
         Schema::create('areas', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('parent_id')->nullable()->index();
+            $table->unsignedInteger('parent_id')->default(0)->index();
             $table->string('name');
             $table->unsignedTinyInteger('type');
             $table->unsignedInteger('code');
